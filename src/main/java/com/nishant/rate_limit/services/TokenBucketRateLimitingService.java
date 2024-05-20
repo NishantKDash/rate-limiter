@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.nishant.rate_limit.models.tokenBucket.Bucket;
 
-public class TokenBucketRateLimitingService implements RateLimitingService {
+public class TokenBucketRateLimitingService  {
 	private final Map<String, Bucket> buckets;
 	private final int capacity;
 	private final int refillTokens;

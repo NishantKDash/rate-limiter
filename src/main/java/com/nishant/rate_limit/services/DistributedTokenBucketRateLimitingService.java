@@ -6,7 +6,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
-public class DistributedTokenBucketRateLimitingService implements RateLimitingService {
+public class DistributedTokenBucketRateLimitingService  {
 
 	private final JedisPool jedisPool;
 	private final int capacity;
@@ -37,7 +37,6 @@ public class DistributedTokenBucketRateLimitingService implements RateLimitingSe
 		}
 	}
 
-	@Override
 	public boolean consume(String key) {
 		String bucketKey = key;
 		try (Jedis jedis = jedisPool.getResource()) {
@@ -64,13 +63,11 @@ public class DistributedTokenBucketRateLimitingService implements RateLimitingSe
 		}
 	}
 
-	@Override
 	public int getCapacity() {
 		// TODO Auto-generated method stub
 		return this.capacity;
 	}
 
-	@Override
 	public long getInterval() {
 		// TODO Auto-generated method stub
 		return this.refillIntervalInMillis;
