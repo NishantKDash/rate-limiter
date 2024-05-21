@@ -28,15 +28,7 @@ public class IPBasedLeakyBucketRateLimitingFilter implements RateLimitingFilter 
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
 		String ip = httpRequest.getRemoteAddr();
 
-		if (this.rateLimitingService.consume(ip, request, response)) {
-			while (rateLimitingService.getCurrentSize() > 0)
-			{
-				Request requestToBeProcessed = rateLimitingService.processRequests();
-				process(chain, requestToBeProcessed.getServletRequest(), requestToBeProcessed.getServletResponse());
-			}
-		}
-
-		else {
+		if (!this.rateLimitingService.consume(ip, request, response, chain)) {
 			httpResponse.setStatus(429);
 			httpResponse.setIntHeader("X-Ratelimit-Limit", this.rateLimitingService.getCapacity());
 			httpResponse.setHeader("X-Ratelimit-Retry-After",
@@ -44,10 +36,11 @@ public class IPBasedLeakyBucketRateLimitingFilter implements RateLimitingFilter 
 		}
 
 	}
-
-	public void process(FilterChain chain, ServletRequest request, ServletResponse response)
-			throws IOException, ServletException {
-		chain.doFilter(request, response);
-	}
+	
+    public void destroy() {
+        if (rateLimitingService != null) {
+            rateLimitingService.shutdown();
+        }
+    }
 
 }

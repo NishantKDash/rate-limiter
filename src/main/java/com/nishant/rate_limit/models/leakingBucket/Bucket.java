@@ -7,7 +7,7 @@ public class Bucket {
 	private final int capacity;
 	private final int refillTokens;
 	private final long refillIntervalInMillis;
-	private  long lastRefillTime;
+	private long lastRefillTime;
 	private AtomicInteger tokens;
 
 	public Bucket(int capacity, int refillTokens, long refillIntervalInMillis) {
